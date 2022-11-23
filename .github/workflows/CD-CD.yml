@@ -1,0 +1,27 @@
+name: CI+CD
+on:
+  push:
+    branches: [master]
+  pull_request: 
+    branches: [master]
+  workflow_dispatch:
+  
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+      - name: compile
+        run: echo Hello World
+  
+    staging:
+      name: deploy to staging
+      if: github.event.ref == 'refs/heads/master'
+      needs: [build]
+      runs-on: ubuntu-latest
+      environment:
+        name: staging
+        url: 'https://yahoo.com'
+      steps:
+        - name: Deploy
+          run: echo I am deploying on production
